@@ -37,8 +37,13 @@ const getRsvpNote = (rsvps: Schema["Todo"]["type"][], eventId: EventId, name: st
 };
 
 const invitees = [
+  'YooJung',
+  'JeeEun',
+  'HaRa',
+  'YuRa',
   'Rose',
   'Darrell',
+  'Mike',
   'David',
   'Suzy',
   'Matthew',
@@ -46,6 +51,9 @@ const invitees = [
   'Shane',
   'Trinity',
   'Luciano',
+  'Riyoung',
+  'Daniel',
+  'Rebekah',
   'Lisa',
   'Stacey',
   'Miranda',
