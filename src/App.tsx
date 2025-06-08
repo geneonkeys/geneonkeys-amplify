@@ -54,7 +54,6 @@ const invitees = [
   'Daci',
   'Dathan',
   'Evie',
-  'Someone else',
 ]
 
 // Add this component for the RSVP name cards
@@ -339,7 +338,7 @@ function App() {
 
                 <p>Where: <a href="https://maps.app.goo.gl/XVRWAR6WqPrX3fuk6" target="_blank" rel="noopener noreferrer">584 S Fletcher Ave, Fernandina Beach, FL 32034</a></p>
                 <p>When: June 18th, 5PM - June 20th, 10AM</p>
-                <p>If you need to stay the night, your room is covered!</p>
+                <p>If you need to stay the night, your room is covered! (Unless literally everybody RSVPs "Yes", then Florida residents may need to sleep at home. 😭)</p>
                 <p>If you need a ride from Savannah, reach out to Daniel, we might have room.</p>
                 <RsvpSection eventId="beach-house" />
               </div>
