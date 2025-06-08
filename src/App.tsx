@@ -62,6 +62,7 @@ const invitees = [
   'Daci',
   'Dathan',
   'Evie',
+  'Jordan',
 ]
 
 // Add this component for the RSVP name cards
