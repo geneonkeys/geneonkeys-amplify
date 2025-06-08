@@ -45,7 +45,7 @@ const invitees = [
   'Darrell',
   'Mike',
   'David',
-  'Suzy',
+  'Susi',
   'Matthew',
   'Brianna',
   'Shane',
