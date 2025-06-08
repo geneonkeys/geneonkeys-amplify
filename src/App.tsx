@@ -104,7 +104,6 @@ function App() {
     <main className="app-container">
       {/* Header with tabs */}
       <div className="vacation-header">
-        <h1>🏖️ St. Augustine Beach House Vacation Planner</h1>
         <div className="tab-navigation">
           <button
             className={`tab-button ${activeTab === 'bulletin' ? 'active' : ''}`}
@@ -125,7 +124,11 @@ function App() {
       {activeTab === 'bulletin' && (
         <>
           <div className="info-section">
-            <h2>You're invited to stay with us at a beach house in St. Augustine!</h2>
+            <h1>YooJung and his family are coming to visit!</h1>
+            <p>When we asked him what he wanted to do, he said "I want to hang out with Grandma Rose and the family!"</p>
+            <p>They'll be with us June 17th-24th, and we'll be doing plenty and would love to have you join us whenever you can, but the main events are....</p>
+            
+            <h2>A Two Night Stay at a St. Augustine Beach House</h2>
 
             <div className="slideshow-container">
               <div className="slideshow-wrapper">
@@ -140,13 +143,14 @@ function App() {
               </div>
             </div>
 
-            <h3>YooJung and his family are coming to visit!</h3>
-            <p>When we asked him what he wanted to do, he said "I want to hang out with Grandma Rose and the family!"</p>
             <p>Where: <a href="https://maps.app.goo.gl/XVRWAR6WqPrX3fuk6" target="_blank" rel="noopener noreferrer">584 S Fletcher Ave, Fernandina Beach, FL 32034</a></p>
             <p>When: June 18th, 5PM - June 20th, 10AM</p>
             <p>If you need to stay the night, your room is covered!</p>
             <p>If you need a ride from Savannah, reach out to Daniel, we might have room.</p>
           </div>
+
+          <h2>A Saturday Night Cookout</h2>
+          <p>Details to come!</p>
 
           <div className="input-section">
             <div className="input-group">
