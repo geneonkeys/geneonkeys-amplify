@@ -9,12 +9,31 @@ function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [name, setName] = useState(""); // State for name input
   const [message, setMessage] = useState(""); // State for message input
+  const [currentImageIndex, setCurrentImageIndex] = useState(0); // State for slideshow
+
+  // Array of images for the slideshow
+  const images = [
+    "https://media.vrbo.com/lodging/67000000/66730000/66726700/66726604/82390e0c.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "https://media.vrbo.com/lodging/67000000/66730000/66726700/66726604/9ef97257.jpg?impolicy=resizecrop&rw=1200&ra=fit",
+    "rooms.png"
+  ];
 
   useEffect(() => {
     client.models.Todo.observeQuery().subscribe({
       next: (data) => setTodos([...data.items]),
     });
   }, []);
+
+  // Auto-advance slideshow every 4 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === images.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [images.length]);
 
   function createTodo() {
     const timeInMs = Date.now(); // Use current timestamp in milliseconds
@@ -24,9 +43,9 @@ function App() {
     setMessage("");
   }
 
-  function deleteTodo(id: string) {
-    client.models.Todo.delete({ id })
-  }
+  // function deleteTodo(id: string) {
+  //   client.models.Todo.delete({ id })
+  // }
 
   // Handler for key press on the message input
   const handleMessageKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -36,6 +55,18 @@ function App() {
     }
   };
 
+  // // Navigation functions for slideshow
+  // const goToPrevious = () => {
+  //   setCurrentImageIndex(currentImageIndex === 0 ? images.length - 1 : currentImageIndex - 1);
+  // };
+
+  // const goToNext = () => {
+  //   setCurrentImageIndex(currentImageIndex === images.length - 1 ? 0 : currentImageIndex + 1);
+  // };
+
+  // const goToSlide = (index: number) => {
+  //   setCurrentImageIndex(index);
+  // };
 
   const sortedTodos = [...todos].sort((a, b) => {
     const timestampA = parseInt(a.content?.split('_____', 1)[0] || '0', 10);
@@ -43,16 +74,50 @@ function App() {
     return timestampA - timestampB;
   });
 
-
   return (
     <main className="app-container">
       <div className="info-section">
-        <h1>You're invited!</h1>
-        <p>YooJung and his family are coming to visit. When we asked him what he wanted to do, he said "I want to hang out with Grandma Rose and the family!"</p>
+        <h1>You're invited to stay with us at a beach house in St. Augustine!</h1>
+        
+        {/* Slideshow container */}
+        <div className="slideshow-container">
+          <div className="slideshow-wrapper">
+            {images.map((image, index) => (
+              <img
+                key={index}
+                src={image}
+                alt={`Beach house ${index + 1}`}
+                className={`slideshow-image ${index === currentImageIndex ? 'active' : ''}`}
+              />
+            ))}
+          </div>
+          
+          {/* Navigation arrows */}
+          {/* <button className="slideshow-nav prev" onClick={goToPrevious}>
+            &#8249;
+          </button>
+          <button className="slideshow-nav next" onClick={goToNext}>
+            &#8250;
+          </button> */}
+          
+          {/* Dots indicator */}
+          {/* <div className="slideshow-dots">
+            {images.map((_, index) => (
+              <button
+                key={index}
+                className={`dot ${index === currentImageIndex ? 'active' : ''}`}
+                onClick={() => goToSlide(index)}
+              />
+            ))}
+          </div> */}
+        </div>
+
+        <h2>YooJung and his family are coming to visit!</h2>
+        <p>When we asked him what he wanted to do, he said "I want to hang out with Grandma Rose and the family!"</p>
         <p>Where: <a href="https://maps.app.goo.gl/XVRWAR6WqPrX3fuk6" target="_blank" rel="noopener noreferrer">584 S Fletcher Ave, Fernandina Beach, FL 32034</a></p>
         <p>When: June 18th, 5PM - June 20th, 10AM</p>
         <p>All you've got to do is show up, your bed is covered. If you need a ride from Savannah, reach out to Daniel, we might have room.</p>
-        <p>Group texts can get messy, so here's a space we can use for chat.</p>
+        <p>Here's a group chat space we can use in case we want an alternative to group texting.</p>
       </div>
 
       <div className="input-section"> {/* Add class name */}
