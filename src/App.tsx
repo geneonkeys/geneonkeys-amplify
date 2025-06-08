@@ -127,7 +127,7 @@ function App() {
             <h1>YooJung and his family are coming to visit!</h1>
             <p>When we asked him what he wanted to do, he said "I want to hang out with Grandma Rose and the family!"</p>
             <p>They'll be with us June 17th-24th, and we'll be doing plenty and would love to have you join us whenever you can, but the main events are....</p>
-            
+
             <h2>A Two Night Stay at a St. Augustine Beach House</h2>
 
             <div className="slideshow-container">
@@ -271,12 +271,13 @@ function App() {
               const title = parts?.[4] || '';
               const description = parts?.[5] || '';
 
-              // Format the date for display
-              const formattedDate = date ? new Date(date).toLocaleDateString('en-US', {
+              // In the itinerary display section, replace the date formatting:
+              const formattedDate = date ? new Date(date + 'T00:00:00').toLocaleDateString('en-US', {
                 weekday: 'short',
                 month: 'short',
                 day: 'numeric'
               }) : '';
+
 
               return (
                 <div key={todo.id} className="itinerary-item">
@@ -288,12 +289,12 @@ function App() {
                     <h4>{title}</h4>
                     {description && <p>{description}</p>}
                   </div>
-                  <button
+                  {isDevelopment && <button
                     className="delete-button"
                     onClick={() => deleteTodo(todo.id)}
                   >
                     ❌
-                  </button>
+                  </button>}
                 </div>
               );
             })}
