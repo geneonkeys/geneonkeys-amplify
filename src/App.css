@@ -1,6 +1,7 @@
 /* src/App.css */
 
 body {
+  text-align: center;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -34,33 +35,36 @@ h1 {
   margin-bottom: 20px;
 }
 
-/* Remove the old .info-section img rule and add these slideshow styles */
-
 .slideshow-container {
   position: relative;
   width: 100%;
-  margin-bottom: 20px;
-  border-radius: 12px;
+  /* Remove the fixed aspect-ratio */
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  /* Add min-height to ensure container has size */
+  min-height: 300px;
 }
 
 .slideshow-wrapper {
   position: relative;
   width: 100%;
-  height: 300px;
-  /* Fixed height for consistent display */
-  overflow: hidden;
+  height: 100%;
+  /* Add min-height here as well */
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .slideshow-image {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  /* Ensures images cover the container while maintaining aspect ratio */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
 }
@@ -68,6 +72,7 @@ h1 {
 .slideshow-image.active {
   opacity: 1;
 }
+
 
 .slideshow-nav {
   position: absolute;
