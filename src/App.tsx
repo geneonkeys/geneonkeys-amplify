@@ -5,8 +5,8 @@ import './App.css';
 const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 const client = generateClient<Schema>();
 
-// Define our "tabs"
-type TabType = 'bulletin' | 'itinerary';
+// Define our "tabs" - Added 'chat'
+type TabType = 'bulletin' | 'itinerary' | 'chat';
 
 type RsvpStatus = 'going' | 'not-going' | 'not-responded';
 type EventId = 'beach-house' | 'cookout';
@@ -115,7 +115,7 @@ const RsvpNameCard = ({
       <div className="rsvp-actions">
         <button
           className="status-button"
-          onClick={() => onStatusChange(status === 'going' ? 'not-going' : 'going')}
+          onClick={() => onStatusChange('going')}
         >
           ✓ Going
         </button>
@@ -127,7 +127,7 @@ const RsvpNameCard = ({
         </button>
         <button
           className="status-button"
-          onClick={() => onStatusChange(status === 'going' ? 'not-going' : 'going')}
+          onClick={() => onStatusChange('not-going')}
         >
           ✗ Not going
         </button>
@@ -135,9 +135,12 @@ const RsvpNameCard = ({
     </div>
   );
 };
+
 // Add this component for the RSVP section
 const RsvpSection = ({ eventId }: { eventId: EventId }) => {
   const [rsvps, setRsvps] = useState<Array<Schema["Todo"]["type"]>>([]);
+  // Add state to manage collapse
+  const [isCollapsed, setIsCollapsed] = useState(true); // Start collapsed by default
 
   useEffect(() => {
     client.models.Todo.observeQuery().subscribe({
@@ -176,32 +179,56 @@ const RsvpSection = ({ eventId }: { eventId: EventId }) => {
     createRsvp(eventId, name, existingStatus, note);
   };
 
+  // Function to toggle the collapsed state
+  const toggleCollapse = () => {
+    setIsCollapsed(!isCollapsed);
+  };
+
+  // Calculate counts
+  const goingCount = invitees.filter(name => getRsvpStatus(rsvps, eventId, name) === 'going').length;
+  const notGoingCount = invitees.filter(name => getRsvpStatus(rsvps, eventId, name) === 'not-going').length;
+  const notRespondedCount = invitees.filter(name => getRsvpStatus(rsvps, eventId, name) === 'not-responded').length;
+
+
   return (
     <div className="rsvp-section">
-      <h3>Who's Coming?</h3>
-      <div className="rsvp-grid">
-        {invitees.map(name => (
-          <RsvpNameCard
-            key={name}
-            name={name}
-            eventId={eventId}
-            status={getRsvpStatus(rsvps, eventId, name)}
-            note={getRsvpNote(rsvps, eventId, name)}
-            onStatusChange={(status) => handleStatusChange(name, status)}
-            onNoteChange={(note) => handleNoteChange(name, note)}
-          />
-        ))}
-      </div>
+      {/* Add a clickable header to toggle collapse */}
+      <h3 onClick={toggleCollapse} style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        Who's Coming?
+        <span className="rsvp-counts">
+          <span className="rsvp-badge going">✅ {goingCount}</span>
+          <span className="rsvp-badge not-going">❌ {notGoingCount}</span>
+          <span className="rsvp-badge not-responded">❓ {notRespondedCount}</span>
+        </span>
+        {isCollapsed ? '▼' : '▲'} {/* Add indicator */}
+      </h3>
+      {/* Conditionally render the grid based on isCollapsed state */}
+      {!isCollapsed && (
+        <div className="rsvp-grid">
+          {invitees.map(name => (
+            <RsvpNameCard
+              key={name}
+              name={name}
+              eventId={eventId}
+              status={getRsvpStatus(rsvps, eventId, name)}
+              note={getRsvpNote(rsvps, eventId, name)}
+              onStatusChange={(status) => handleStatusChange(name, status)}
+              onNoteChange={(note) => handleNoteChange(name, note)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
+
 
 function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState<TabType>('bulletin');
+  const [activeTab, setActiveTab] = useState<TabType>('bulletin'); // Default to bulletin
   const [itineraryDate, setItineraryDate] = useState("");
 
 
@@ -306,10 +333,17 @@ function App() {
             >
               📅 Itinerary
             </button>
+            {/* New Chat Tab Button */}
+            <button
+              className={`tab-button ${activeTab === 'chat' ? 'active' : ''}`}
+              onClick={() => setActiveTab('chat')}
+            >
+              💬 Chat
+            </button>
           </div>
         </div>
 
-        {/* Bulletin Tab */}
+        {/* Bulletin Tab Content */}
         {activeTab === 'bulletin' && (
           <>
             <div className="info-section">
@@ -321,7 +355,7 @@ function App() {
 
               <div className="main-event-card beach-house">
 
-                <h2>A Two Night Stay at a Amelia Island Beach House</h2>
+                <h2>A Two Night Stay at an Amelia Island Beach House</h2>
 
                 <div className="slideshow-container">
                   <div className="slideshow-wrapper">
@@ -340,74 +374,24 @@ function App() {
                 <p>When: June 18th, 5PM - June 20th, 10AM</p>
                 <p>If you need to stay the night, your room is covered! (Unless literally everybody RSVPs "Yes", then Florida residents may need to sleep at home. 😭)</p>
                 <p>If you need a ride from Savannah, reach out to Daniel, we might have room.</p>
+
+                <p>You can RSVP below and leave a note with your ETA if you're coming!</p>
                 <RsvpSection eventId="beach-house" />
               </div>
             </div>
             <div className="main-event-card beach-house">
-              <h2>A Saturday Night Cookout</h2>
-              <p>Details to come!</p>
+              <h2>A Family Cookout</h2>
+              <p>Hamburgers and hotdogs provided, leave a note if you're bringing a dish!</p>
+              <p>Where: David and Lisa's Place</p>
+              <p>When: Saturday, June 21st 2PM - ???</p>
+              <p>You can RSVP below and leave a note if you're bringing a dish!</p>
               <RsvpSection eventId="cookout" />
             </div>
-
-            <div className="input-section">
-              <div className="input-group">
-                <label htmlFor="name">Name:</label>
-                <input
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter your name"
-                />
-              </div>
-
-              {name && (
-                <div className="input-group">
-                  <label htmlFor="message">Message:</label>
-                  <input
-                    id="message"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    onKeyPress={handleMessageKeyPress}
-                    placeholder={`Message from ${name}`}
-                  />
-                </div>
-              )}
-
-              {name && message && (
-                <button onClick={createMessage} className="send-button">Post</button>
-              )}
-            </div>
-
-            <div className="messages-section">
-              <h2>Family Chat</h2>
-              {sortedMessages.map((todo) => {
-                const parts = todo.content?.split('_____');
-                const timestamp = parseInt(parts?.[1] || '0', 10);
-                const displayName = parts?.[2] || 'Anonymous';
-                const displayMessage = parts?.[3] || '';
-
-                const dateObj = new Date(timestamp);
-                const displayDay = dateObj.toLocaleDateString([], { weekday: 'short' });
-                const displayTime = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-                return (
-                  <div onClick={() => deleteTodo(todo.id)} key={todo.id} className="message-card">
-                    <div className="message-header">
-                      <strong className="message-name">{displayName}</strong>
-                      <div className="message-timestamp">
-                        <span className="timestamp-day">{displayDay}</span>
-                        <span className="timestamp-time">{displayTime}</span>
-                      </div>
-                    </div>
-                    <div className="message-body">{displayMessage}</div>
-                  </div>
-                );
-              })}
-            </div>
+            {/* Removed Chat section from Bulletin */}
           </>
         )}
 
-        {/* Itinerary Tab */}
+        {/* Itinerary Tab Content */}
         {activeTab === 'itinerary' && (
           <div className="itinerary-section">
             <h2>📅 Vacation Itinerary</h2>
@@ -492,6 +476,63 @@ function App() {
                     >
                       ❌
                     </button>}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* New Chat Tab Content */}
+        {activeTab === 'chat' && (
+          <div className="chat-section"> {/* Added a class for potential styling */}
+            <div className="input-section">
+              <div className="input-group">
+                <label htmlFor="name">Name:</label>
+                <input
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter your name"
+                />
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="message">Message:</label>
+                <input
+                  id="message"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyPress={handleMessageKeyPress}
+                  placeholder={`Message from ${name}`}
+                />
+              </div>
+
+              <button onClick={createMessage} className="send-button">Post</button>
+            </div>
+
+            <div className="messages-section">
+              <h2>Family Chat</h2>
+              {sortedMessages.map((todo) => {
+                const parts = todo.content?.split('_____');
+                const timestamp = parseInt(parts?.[1] || '0', 10);
+                const displayName = parts?.[2] || 'Anonymous';
+                const displayMessage = parts?.[3] || '';
+
+                const dateObj = new Date(timestamp);
+                const displayDay = dateObj.toLocaleDateString([], { weekday: 'short' });
+                const displayTime = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                return (
+                  <div onClick={() => deleteTodo(todo.id)} key={todo.id} className="message-card">
+                    <div className="message-header">
+                      <strong className="message-name">{displayName}</strong>
+                      <div className="message-timestamp">
+                        <span className="timestamp-day">{displayDay}</span>
+                        <span className="timestamp-time">{displayTime}</span>
+                      </div>
+                    </div>
+                    <div className="message-body">{displayMessage}</div>
                   </div>
                 );
               })}
