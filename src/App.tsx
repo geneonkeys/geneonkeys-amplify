@@ -532,7 +532,7 @@ function App() {
                 const displayTime = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
                 return (
-                  <div onClick={() => deleteTodo(todo.id)} key={todo.id} className="message-card">
+                  <div onClick={isDevelopment ? () => deleteTodo(todo.id) : undefined} key={todo.id} className="message-card">
                     <div className="message-header">
                       <strong className="message-name">{displayName}</strong>
                       <div className="message-timestamp">
