@@ -131,7 +131,7 @@ function App() {
 
             <div className="main-event-card beach-house">
 
-              <h2>A Two Night Stay at a St. Augustine Beach House</h2>
+              <h2>A Two Night Stay at a Amelia Island Beach House</h2>
 
               <div className="slideshow-container">
                 <div className="slideshow-wrapper">
