@@ -25,7 +25,7 @@ function App() {
   const images = [
     "https://media.vrbo.com/lodging/67000000/66730000/66726700/66726604/82390e0c.jpg?impolicy=resizecrop&rw=1200&ra=fit",
     "https://media.vrbo.com/lodging/67000000/66730000/66726700/66726604/9ef97257.jpg?impolicy=resizecrop&rw=1200&ra=fit",
-    "rooms.png"
+    "/rooms.png"
   ];
 
   useEffect(() => {
