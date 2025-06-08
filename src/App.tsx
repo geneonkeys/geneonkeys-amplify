@@ -111,7 +111,10 @@ function App() {
           }
 
           return (
-            <div onClick={deleteTodo.bind(null, todo.id)} key={todo.id} className="message-card">
+            <div
+              // onClick={deleteTodo.bind(null, todo.id)}
+              key={todo.id}
+              className="message-card">
               <div className="message-header">
                 <strong className="message-name">{displayName}</strong>
                 <div className="message-timestamp">
