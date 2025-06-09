@@ -363,9 +363,7 @@ function App() {
               <p>We'll be doing plenty and would love to have you join us whenever you can, but the main events are....</p>
 
               <div className="main-event-card beach-house">
-
-                <h2>A Two Night Stay at an Amelia Island Beach House</h2>
-
+                <h2>Amelia Island (no pets!)</h2>
                 <div className="slideshow-container">
                   <div className="slideshow-wrapper">
                     {images.map((image, index) => (
@@ -378,13 +376,11 @@ function App() {
                     ))}
                   </div>
                 </div>
-
                 <p>Where: <a href="https://maps.app.goo.gl/XVRWAR6WqPrX3fuk6" target="_blank" rel="noopener noreferrer">584 S Fletcher Ave, Fernandina Beach, FL 32034</a></p>
+                <p>What: Check out their <a href="https://www.vrbo.com/2275500">Vrbo</a></p>
                 <p>When: June 18th, 5PM - June 20th, 10AM</p>
                 <p>If you need to stay the night, your room is covered! (Unless literally everybody RSVPs "Yes", then Florida residents may need to sleep at home. 😭)</p>
                 <p>If you need a ride from Savannah, reach out to Daniel, we might have room.</p>
-
-                <p>You can RSVP below and leave a note with your ETA if you're coming!</p>
                 <RsvpSection eventId="beach-house" />
               </div>
             </div>
